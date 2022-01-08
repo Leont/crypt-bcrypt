@@ -1,6 +1,8 @@
 Revision history for Crypt-Bcrypt
 
 {{$NEXT}}
+
+0.004     2022-01-08 14:16:38+01:00 Europe/Amsterdam
           - Disable x86 assembly code
 
 0.003     2022-01-07 14:50:11+01:00 Europe/Amsterdam
