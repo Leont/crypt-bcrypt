@@ -43,6 +43,8 @@ This module provides a modern and user-friendly implementation of the bcrypt pas
 
 Note that in bcrypt passwords may only contain 72 characters. It may seem tempting to prehash the password before bcrypting it but that may make it vulnerable to password shucking, a salted solution (for example using a MAC) should be used instead if one wants to support large passwords.
 
+The password is always expected to come as a (utf8-encoded) byte-string.
+
 =func bcrypt($password, $subtype, $cost, $salt)
 
 This computes the bcrypt hash for C<$password> in C<$subtype>, with C<$cost> and C<$salt>.

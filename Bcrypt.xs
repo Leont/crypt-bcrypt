@@ -22,9 +22,10 @@ MODULE = Crypt::Bcrypt              PACKAGE = Crypt::Bcrypt
 PROTOTYPES: DISABLE
 
 SV*
-_bcrypt_hashpw(const char* password, const char* settings)
+_bcrypt_hashpw(SV* password_sv, const char* settings)
 CODE:
 	char outhash[BCRYPT_HASHSIZE];
+	const char* password = SvPVbyte_nolen(password_sv);
 	const char* output = _crypt_blowfish_rn(password, settings, outhash, BCRYPT_HASHSIZE);
 	if (output == NULL)
 		Perl_croak(aTHX_ "Could not hash: %s", strerror(errno));
@@ -37,7 +38,7 @@ bcrypt_check(char* password, SV* hash_sv)
 CODE:
 	char outhash[BCRYPT_HASHSIZE];
 	STRLEN hashlen;
-	const char* hash = SvPV(hash_sv, hashlen);
+	const char* hash = SvPVbyte(hash_sv, hashlen);
 	const char* ret = _crypt_blowfish_rn(password, hash, outhash, BCRYPT_HASHSIZE);
 	if (!ret || strlen(outhash) != hashlen)
 		RETVAL = 0;
