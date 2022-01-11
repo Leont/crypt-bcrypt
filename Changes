@@ -1,6 +1,8 @@
 Revision history for Crypt-Bcrypt
 
 {{$NEXT}}
+
+0.005     2022-01-11 22:00:41+01:00 Europe/Amsterdam
           - Force byte semantics on password strings
 
 0.004     2022-01-08 14:16:38+01:00 Europe/Amsterdam
