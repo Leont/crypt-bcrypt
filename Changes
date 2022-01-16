@@ -1,6 +1,7 @@
 Revision history for Crypt-Bcrypt
 
 {{$NEXT}}
+          - Allow cost=4
 
 0.005     2022-01-11 22:00:41+01:00 Europe/Amsterdam
           - Force byte semantics on password strings
