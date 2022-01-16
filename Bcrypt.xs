@@ -21,13 +21,13 @@ MODULE = Crypt::Bcrypt              PACKAGE = Crypt::Bcrypt
 
 PROTOTYPES: DISABLE
 
-SV* _bcrypt_hashpw(const char* password, const char* settings)
+const char* _bcrypt_hashpw(const char* password, const char* settings)
 CODE:
 	char outhash[BCRYPT_HASHSIZE];
 	const char* output = _crypt_blowfish_rn(password, settings, outhash, BCRYPT_HASHSIZE);
 	if (output == NULL)
 		Perl_croak(aTHX_ "Could not hash: %s", strerror(errno));
-	RETVAL = newSVpv(outhash, 0);
+	RETVAL = outhash;
 OUTPUT:
 	RETVAL
 
