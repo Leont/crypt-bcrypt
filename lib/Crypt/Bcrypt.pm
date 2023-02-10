@@ -116,7 +116,7 @@ This is a very broken version that is only useful for compatibility with ancient
 
 =back
 
-C<$cost> must be between 5 and 31 (inclusive). C<$salt> must be exactly 16 bytes.
+C<$cost> must be between 4 and 31 (inclusive). C<$salt> must be exactly 16 bytes.
 
 =func bcrypt_check($password, $hash)
 
@@ -124,7 +124,7 @@ This checks if the C<$password> satisfies the C<$hash>, and does so in a timing-
 
 =func bcrypt_hashed($password, $subtype, $cost, $salt, $hash_algorithm)
 
-This works like the C<bcrypt> functions, but pre-hashes the password using the specified hash. This is mainly useful to get around the 72 character limit. Currently only sha256 is supported. This uses a salt-keyed hash to prevent password shucking.
+This works like the C<bcrypt> functions, but pre-hashes the password using the specified hash. This is mainly useful to get around the 72 character limit. Currently only sha256 is supported. This uses a salt-keyed hash to prevent password shucking. If C<$hash_algorithm> is an empty string it will perform a normal C<bcrypt> operation.
 
 =func bcrypt_check_hashed($password, $hash)
 
