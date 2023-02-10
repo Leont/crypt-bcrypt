@@ -58,12 +58,13 @@ sub _get_parameters {
 	elsif ($hash =~ / ^ \$ bcrypt-sha256 \$ v=2,t=($subtype_qr),r=($cost_qr) \$ /x) {
 		return ($1, $2, 'sha256');
 	}
+	return ('', 0, '');
 }
 
 sub bcrypt_needs_rehash {
 	my ($hash, $wanted_subtype, $wanted_cost, $wanted_hash) = @_;
 	my ($my_subtype, $my_cost, $my_hash) = _get_parameters($hash);
-	return $my_subtype ne $wanted_subtype || $my_cost < $wanted_cost || $my_hash ne ($wanted_hash || '');
+	return $my_subtype ne $wanted_subtype || $my_cost != $wanted_cost || $my_hash ne ($wanted_hash || '');
 }
 
 1;
