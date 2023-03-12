@@ -9,14 +9,15 @@ XSLoader::load('Crypt::Bcrypt');
 use Exporter 5.57 'import';
 our @EXPORT_OK = qw(bcrypt bcrypt_check bcrypt_prehashed bcrypt_check_prehashed bcrypt_hashed bcrypt_check_hashed bcrypt_needs_rehash bcrypt_supported_prehashes);
 
+use Carp 'croak';
 use Digest::SHA 'hmac_sha256';
 use MIME::Base64 2.21 qw(encode_base64);
 
 sub bcrypt {
 	my ($password, $subtype, $cost, $salt) = @_;
-	die "Unknown subtype $subtype" if $subtype !~ /^2[abxy]$/;
-	die "Invalid cost factor $cost" if $cost < 4 || $cost > 31;
-	die "Salt must be 16 bytes" if length $salt != 16;
+	croak "Unknown subtype $subtype" if $subtype !~ /^2[abxy]$/;
+	croak "Invalid cost factor $cost" if $cost < 4 || $cost > 31;
+	croak "Salt must be 16 bytes" if length $salt != 16;
 	my $encoded_salt = encode_base64($salt, "");
 	$encoded_salt =~ tr{A-Za-z0-9+/=}{./A-Za-z0-9}d;
 	return _bcrypt_hashpw($password, sprintf '$%s$%02d$%s', $subtype, $cost, $encoded_salt);
@@ -32,7 +33,7 @@ sub bcrypt_prehashed {
 		(my $encoded_salt = encode_base64($salt, "")) =~ tr{A-Za-z0-9+/=}{./A-Za-z0-9}d;
 		my $hashed_password = encode_base64(hmac_sha256($password, $encoded_salt), "");
 		my $hash = bcrypt($hashed_password, $subtype, $cost, $salt);
-		$hash =~ s{ ^ \$ ($subtype_qr) \$ ($cost_qr) \$ ($salt_qr) }{\$bcrypt-sha256\$v=2,t=$1,r=$2\$$3\$}x or die $hash;
+		$hash =~ s{ ^ \$ ($subtype_qr) \$ ($cost_qr) \$ ($salt_qr) }{\$bcrypt-sha256\$v=2,t=$1,r=$2\$$3\$}x or croak $hash;
 		return $hash;
 	}
 	else {
