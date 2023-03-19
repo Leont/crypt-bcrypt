@@ -1,6 +1,8 @@
 Revision history for Crypt-Bcrypt
 
 {{$NEXT}}
+
+0.011     2023-03-19 13:42:13+01:00 Europe/Amsterdam
           - Add bcrypt_supported_prehashes()
           - Add support for prehashing with sha384 and sha512
 
