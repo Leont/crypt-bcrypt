@@ -7,20 +7,25 @@ use XSLoader;
 XSLoader::load('Crypt::Bcrypt');
 
 use Exporter 5.57 'import';
-our @EXPORT_OK = qw(bcrypt bcrypt_check bcrypt_prehashed bcrypt_check_prehashed bcrypt_hashed bcrypt_check_hashed bcrypt_needs_rehash bcrypt_supported_prehashes bcrypt_crypt);
+our @EXPORT_OK = qw(bcrypt bcrypt_check bcrypt_prehashed bcrypt_check_prehashed bcrypt_hashed bcrypt_check_hashed bcrypt_needs_rehash bcrypt_supported_prehashes bcrypt_crypt en_base64);
 
 use Carp 'croak';
 use Digest::SHA;
 use MIME::Base64 2.21 qw(encode_base64);
+
+sub en_base64 {
+	my $input = shift;
+	my $output = encode_base64($input, "");
+	$output =~ tr{A-Za-z0-9+/=}{./A-Za-z0-9}d;
+	return $output;
+}
 
 sub bcrypt {
 	my ($password, $subtype, $cost, $salt) = @_;
 	croak "Unknown subtype $subtype" if $subtype !~ /^2[abxy]$/;
 	croak "Invalid cost factor $cost" if $cost < 4 || $cost > 31;
 	croak "Salt must be 16 bytes" if length $salt != 16;
-	my $encoded_salt = encode_base64($salt, "");
-	$encoded_salt =~ tr{A-Za-z0-9+/=}{./A-Za-z0-9}d;
-	return bcrypt_crypt($password, sprintf '$%s$%02d$%s', $subtype, $cost, $encoded_salt);
+	return bcrypt_crypt($password, sprintf '$%s$%02d$%s', $subtype, $cost, en_base64($salt));
 }
 
 my $subtype_qr = qr/2[abxy]/;
