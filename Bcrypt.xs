@@ -21,7 +21,7 @@ MODULE = Crypt::Bcrypt              PACKAGE = Crypt::Bcrypt
 
 PROTOTYPES: DISABLE
 
-const char* _bcrypt_hashpw(const char* password, const char* settings)
+const char* bcrypt_crypt(const char* password, const char* settings)
 CODE:
 	char outhash[BCRYPT_HASHSIZE];
 	const char* output = _crypt_blowfish_rn(password, settings, outhash, BCRYPT_HASHSIZE);
