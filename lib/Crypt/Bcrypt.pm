@@ -18,6 +18,7 @@ sub bcrypt {
 	croak "Unknown subtype $subtype" if $subtype !~ /^2[abxy]$/;
 	croak "Invalid cost factor $cost" if $cost < 4 || $cost > 31;
 	croak "Salt must be 16 bytes" if length $salt != 16;
+	croak "Password must be less than 72 bytes" if length $password > 72;
 	my $encoded_salt = encode_base64($salt, "");
 	$encoded_salt =~ tr{A-Za-z0-9+/=}{./A-Za-z0-9}d;
 	return _bcrypt_hashpw($password, sprintf '$%s$%02d$%s', $subtype, $cost, $encoded_salt);
@@ -140,6 +141,7 @@ C<$cost> must be between 4 and 31 (inclusive). C<$salt> must be exactly 16 bytes
 =func bcrypt_check($password, $hash)
 
 This checks if the C<$password> satisfies the C<$hash>, and does so in a timing-safe manner.
+It will croak if the C<$password> is greater than 72 bytes.
 
 =func bcrypt_prehashed($password, $subtype, $cost, $salt, $hash_algorithm)
 
